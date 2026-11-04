@@ -1,4 +1,7 @@
-import os, requests
+import os
+
+import requests
+
 
 class OllamaClient:
     def generate(self, prompt: str) -> str:

@@ -1,6 +1,8 @@
 from fastapi.testclient import TestClient
-from app.main import app
+
 from app.llm import get_llm
+from app.main import app
+
 
 class FakeLLM:
     def generate(self, prompt: str) -> str:

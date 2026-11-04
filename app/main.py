@@ -1,11 +1,14 @@
-from fastapi import FastAPI, UploadFile
-from pydantic import BaseModel
-from app import rag, llm
-from fastapi import Depends
-from app.llm import get_llm
-from pypdf import PdfReader
 from io import BytesIO
-from fastapi import HTTPException
+from typing import Annotated, Any
+
+from fastapi import Depends, FastAPI, HTTPException, UploadFile
+from pydantic import BaseModel
+from pypdf import PdfReader
+
+from app import rag
+from app.llm import get_llm
+
+LLMClient = Annotated[Any, Depends(get_llm)]
 
 app = FastAPI(title="RAG API")
 
@@ -38,7 +41,7 @@ async def upload(file: UploadFile):
     return {"stored": file.filename, "characters": len(text)}
 
 @app.post("/ask")
-def ask(body: Question, llm = Depends(get_llm)):
+def ask(body: Question, llm: LLMClient):
     chunks = rag.retrieve(body.question)
     context = "\n---\n".join(chunks)
     prompt = (
