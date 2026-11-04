@@ -22,8 +22,9 @@ class GroqClient:
                 "Content-Type": "application/json",
             },
             json={
-                "model": os.getenv("GROQ_MODEL", "llama-3.1-8b-instant"),
+                "model": os.getenv("MODEL_NAME", "qwen/qwen3.8-27b"),
                 "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": int(os.getenv("MAX_OUTPUT_TOKENS", "400")),
             },
             timeout=60,
         )
